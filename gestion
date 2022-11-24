@@ -1,0 +1,47 @@
+Consulta 1
+/*Mostrar el numero de estudiantes y docentes que pertenece a la academia*/
+
+select COUNT(nombre), 'estudiante' AS profesion  from estudiante 
+union 
+select COUNT(nombre), 'docente' from docente
+order by profesion
+
+consulta2
+/*Mostar de mayor a menor los nombres de los estudiantes con sus respectivas 
+calificaciones, en los cuales debe mostrar nombre, apellidos, cedula, nivel, seccion, 
+calificacion1, calificacion2, calificacion3 */
+
+
+select nombre, apellido, cedula, nivel,seccion,calificacion1,calificacion2,calificacion3, 
+from estudiante join curso 
+on curso.id_curso = estudiante.id_curso
+inner join calificacion on calificacion.id_docente = estudiante.id_docente
+inner join materia on materia.id_docente = calificacion.id_docente
+GROUP BY nombre,apellido,cedula,nivel, calificacion1,calificacion2,calificacion3,seccion
+ORDER BY nombre asc;
+
+consulta 3
+/*Consular el numero de estudiantes que sufrieron sanciones por la perdida de su 
+arma en la cuales muestre, nombre del estudiante, CI, código del estudiante, 
+nombre del arma, código del arma, tipo del arma y tipo de sanción.  */
+
+select count(nombre) as numeroestudiante, nombre,cedula, motivo_sancion, nombre_arma
+,tipo_arma,tipo_sancion
+from estudiante join sancion 
+on sancion.id_sancion = estudiante.id_estudiante
+inner join arma on arma.id_arma = estudiante.id_arma 
+WHERE sancion.motivo_sancion= 'perida de armamento'
+GROUP BY motivo_sancion, nombre, cedula, nombre_arma,tipo_arma, tipo_sancion
+
+
+consulta 4
+/*Mostrar el nombre de los estudiantes matriculado en una asignatura 
+las cuales pueda mostrar por columna el nombre del estudiante, CI, 
+nombre la asignatura, nivel al que pertenece, sección al que pertenece*/
+
+select count(nombre) as numeroestudiantes, nombre,cedula, materia, seccion, nivel
+from estudiante join materia 
+on materia.id_materia = estudiante.id_estudiante
+join curso on curso.id_estudiante = materia.id_estudiante
+where materia.materia = 'matematica'
+group by nombre,cedula, materia, seccion, nivel
